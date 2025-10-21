@@ -14,12 +14,12 @@ export default function LivroForm() {
     const navigate = useNavigate();
 
     // Salvar os dados
-    const salvar = async (e) =>{
+    const salvar = async (e) => {
         // Desativa o comportamento padrão do navegador (atualizar a página)
         e.preventDefault()
 
         // Cria o objeto com os dados do fotrmulario
-        const dados = {titulo, categoria, descricao}
+        const dados = { titulo, categoria, descricao }
 
         // Envia o objeto para o backend pelo método Post (criar)
         await api.post("/livro", dados)
@@ -85,7 +85,7 @@ export default function LivroForm() {
                         ></textarea>
                     </div>
 
-                    <button type="submit" className="btn btn-success">Salvar</button>
+                    <button type="submit" onClick={salvar} className="btn btn-success">Salvar</button>
                     <Link className="btn btn-warning ms-2" to={`/`}>
                         Voltar
                     </Link>

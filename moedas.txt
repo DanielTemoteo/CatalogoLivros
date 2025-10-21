@@ -1,0 +1,61 @@
+$(document).ready(function(){
+
+    const listaMoedas = $("#lista-moedas")
+    const carregando = $("#loading")
+    const apiURL = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/Moedas?$top=100&$format=json"
+    //const dataHoje = "09/03/2025"
+
+    const hoje = new Date()
+    const dia = hoje.getDate()
+    const mes = hoje.getMonth()
+    const ano = hoje.getFullYear()
+
+    const dataHoje = `$(mes), $(dia), $(ano)`
+    console.log()
+    function buscarMoedas(){
+        carregando.show()
+
+        // Chamar a api 
+        $.getJSON(apiURL)
+        .done(data => {
+            
+            // interar sobre o array de objeto
+            data.value.forEach(objetoMoeda => {
+                
+                
+                // Obter a cotação da moeda
+                const apiCotacao = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodo(moeda=@moeda,dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)?%40moeda='${objetoMoeda.}'&%40dataInicial='${dataHoje}'&%40dataFinalCotacao='${dataHoje}'&%24top=100&%24format=json&%24select=paridadeCompra,paridadeVenda,cotacaoCompra,cotacaoVenda,dataHoraCotacao,tipoBoletim`
+                
+                $.getJSON(apiCotacao)
+                .done(listaDeCotacoes => {
+
+                    // pegar o array de objetos
+                    let compra = listaDeCotacoes.value(4).cotacaoCompra
+                    let venda = listaDeCotacoes.value(4).cotacaoVenda
+
+                    // fixar duas casa decimais
+                    compra = compra.toFixed(2)
+                    venda = venda.toFixed(2)
+                    
+                    // substituir o ponto pela virgula
+                    compra = compra.replace(".",",")
+                    venda = venda.replace(".",",")
+                    const item = `<li class="moeda-item">
+                <span class="simbolo">${objetoMoeda.simbolo}</span>  
+                ${objetoMoeda.nomeFormatado} |
+                compra ${compra} |
+                venda ${venda}
+                </li>`
+
+                // Adicionar na lista do HTML
+                listaMoedas.append(item)
+                })
+            })
+        })
+
+        carregando.hide()
+    }
+
+    
+    buscarMoedas()
+})
