@@ -1,0 +1,18 @@
+{
+    "livros": [
+        {
+            "id": "1",
+            "titulo": "Dom Casmurro",
+            "paginas": "256",
+            "categoria": "Literatura",
+            "descricao": "Uma das maiores obras da literatura brasileira."
+        },
+         {
+            "id": "2",
+            "titulo": "O Diário de Anne Frank",
+            "paginas": "256",
+            "categoria": "Biografia",
+            "descricao": "Um relato de uma jovem judia escondida durante a ocupação nazista"
+        }
+    ]
+}
